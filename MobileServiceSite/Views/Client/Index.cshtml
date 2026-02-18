@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Client page";
+}
+<div class="client-register">
+    <h2>Client INFO</h2>
+    <p class="instruction">Please enter your contact information</p>
+
+    <form method="post"  class="client-form">
+        <div class="form-group">
+            <label for="first_name"><b>First Name</b></label>
+            <input type="text" placeholder="Enter..." name="first_name" required />
+        </div>
+
+        <div class="form-group">
+            <label for="last_name"><b>Last Name</b></label>
+            <input type="text" placeholder="Enter..." name="last_name" required />
+        </div>
+
+        <div class="form-group">
+            <label for="phone"><b>Phone Number</b></label>
+            <input type="text" placeholder="Enter..." name="phone" required />
+        </div>
+
+        <div class="form-group">
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter..." name="email"/>
+        </div>
+
+        <button type="submit" class="registerbtn" >Submit</button>
+    </form>
+</div>
+

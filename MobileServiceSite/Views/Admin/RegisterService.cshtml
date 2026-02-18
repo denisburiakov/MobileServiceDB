@@ -1,0 +1,40 @@
+﻿@model MobileServiceSite.Models.Service
+@{
+    ViewData["Title"] = "Service Registration";
+}
+<div class="client-register">
+    <h2>Service Information</h2>
+    <p class="instruction">Please enter service details</p>
+
+    <form method="post" action="/Admin/RegisterService" class="client-form">
+        <div class="form-group">
+            <label for="DeviceId"><b>Device ID </b></label>
+            <input type="number" placeholder="Please, enter..." name="device_id" />
+            <small>Find device ID in the devices table</small>
+        </div>
+
+        <div class="form-group">
+            <label for="CategoryId"><b>Category ID (Optional)</b></label>
+            <input type="number" placeholder="Please, enter..." name="category_id" />
+            <small>Find category ID in the categories table</small>
+        </div>
+
+        <div class="form-group">
+            <label for="TypeOfService"><b>Service Type </b></label>
+            <input type="text" placeholder="Please, enter..." name="type_of_service"/>
+        </div>
+
+        <div class="form-group">
+            <label for="TimeOfDoing"><b>Estimated Time</b></label>
+            <input type="text" placeholder="Please, enter..." name="time_of_doing" />
+        </div>
+
+        <div class="form-group">
+            <label for="CostOfService"><b>Service Cost </b></label>
+            <input type="number" placeholder="Please, enter..." name="cost_of_service" min="0"/>
+        </div>
+
+        <button type="submit" class="registerbtn">Register Service</button>
+        <a href="/Admin" class="back-btn">Back to Admin</a>
+    </form>
+</div>

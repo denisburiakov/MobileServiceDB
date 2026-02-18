@@ -1,0 +1,18 @@
+﻿@model MobileServiceSite.Models.Category
+@{
+    ViewData["Title"] = "Category Registration";
+}
+<div class="client-register">
+    <h2>Service Category</h2>
+    <p class="instruction">Please enter category name</p>
+
+    <form method="post" action="/Admin/RegisterCategory" class="client-form">
+        <div class="form-group">
+            <label for="Categories"><b>Category Name</b></label>
+            <input type="text" placeholder="Please, enter..." name="categories" required />
+        </div>
+
+        <button type="submit" class="registerbtn">Register Category</button>
+        <a href="/Admin" class="back-btn">Back to Admin</a>
+    </form>
+</div>

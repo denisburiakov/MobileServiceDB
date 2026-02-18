@@ -1,0 +1,44 @@
+﻿@model MobileServiceSite.Models.Device
+@{
+    ViewData["Title"] = "Device Registration";
+}
+<div class="client-register">
+    <h2>Device Information</h2>
+    <p class="instruction">Please enter device details</p>
+
+    <form method="post" action="/Admin/RegisterDevice" class="client-form">
+        <div class="form-group">
+            <label for="ClientId"><b>Client ID</b></label>
+            <input type="number" placeholder="Please, enter..." name="client_id" required />
+            <small>Find client ID in the clients table</small>
+        </div>
+
+        <div class="form-group">
+            <label for="TypeOfDevice"><b>Device Type</b></label>
+            <input type="text" placeholder="Please, enter..." name="type_of_device" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Producer"><b>Manufacturer</b></label>
+            <input type="text" placeholder="Please, enter..." name="producer" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Model"><b>Model </b></label>
+            <input type="text" placeholder="Please, enter..." name="model" required />
+        </div>
+
+        <div class="form-group">
+            <label for="SerialNumber"><b>Serial Number</b></label>
+            <input type="text" placeholder="Please, enter..." name="serial_number" required />
+        </div>
+
+        <div class="form-group">
+            <label for="DefDescriotion"><b>Problem Description</b></label>
+            <textarea placeholder="Please, enter..." name="def_descriotion" rows="3" required></textarea>
+        </div>
+
+        <button type="submit" class="registerbtn">Register Device</button>
+        <a href="/Admin" class="back-btn">Back to Admin</a>
+    </form>
+</div>

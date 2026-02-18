@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Client Information";
+    var client = ViewBag.Client as MobileServiceSite.Models.Client;
+    var devices = ViewBag.Devices as List<MobileServiceSite.Models.Device>;
+    var services = ViewBag.Services as List<MobileServiceSite.Models.Service>;
+    var details = ViewBag.Details as List<MobileServiceSite.Models.Detail>;
+}
+
+<div class="client-info-container">
+    <a href="/Admin" class="back-btn">← Back to Admin</a>
+
+    <h1>👤 Client Information</h1>
+
+    @if (client != null)
+    {
+        <!-- Информация о клиенте -->
+        <div class="client-card">
+            <h2>Client Details</h2>
+            <div class="client-details">
+                <div class="detail-row">
+                    <span class="label">ID:</span>
+                    <span class="value">@client.Id</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Full Name:</span>
+                    <span class="value">@client.FirstName @client.LastName</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Phone:</span>
+                    <span class="value">@client.Phone</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Email:</span>
+                    <span class="value">@(client.Email ?? "Not specified")</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Устройства клиента -->
+        <div class="devices-section">
+            <h2>📱 Devices (@devices?.Count)</h2>
+
+            @if (devices != null && devices.Any())
+            {
+                @foreach (var device in devices)
+                {
+                    <div class="device-card">
+                        <h3>@device.Producer @device.Model</h3>
+                        <div class="device-details">
+                            <p><strong>Type:</strong> @device.TypeOfDevice</p>
+                            <p><strong>Serial:</strong> @device.SerialNumber</p>
+                            <p><strong>Problem:</strong> @device.DefDescriotion</p>
+                            <p><strong>Device ID:</strong> @device.Id</p>
+                        </div>
+
+                        <!-- Сервисы для этого устройства -->
+                        @{
+                            var deviceServices = services?.Where(s => s.DeviceId == device.Id).ToList();
+                        }
+                        @if (deviceServices != null && deviceServices.Any())
+                        {
+                            <div class="services-list">
+                                <h4>Services (@deviceServices.Count):</h4>
+                                @foreach (var service in deviceServices)
+                                {
+                                    <div class="service-item">
+                                        <p><strong>@service.TypeOfService</strong></p>
+                                        <p>Cost: @service.CostOfService BYN</p>
+                                        <p>Time: @(service.TimeOfDoing ?? "Not specified")</p>
+                                        @if (service.Category != null)
+                                        {
+                                            <p>Category: @service.Category.Categories</p>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="no-data">No services for this device</p>
+                        }
+
+                        <!-- Детали для этого устройства -->
+                        @{
+                            var deviceDetails = details?.Where(d => d.DeviceId == device.Id).ToList();
+                        }
+                        @if (deviceDetails != null && deviceDetails.Any())
+                        {
+                            <div class="details-list">
+                                <h4>Parts/Details (@deviceDetails.Count):</h4>
+                                @foreach (var detail in deviceDetails)
+                                {
+                                    <div class="detail-item">
+                                        <p><strong>@detail.TypeOfDetail</strong></p>
+                                        <p>Manufacturer: @detail.ProducerDet</p>
+                                        <p>Cost: @detail.CostOfDetail BYN</p>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="no-data">No parts for this device</p>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="no-data">No devices found for this client</p>
+            }
+        </div>
+
+        <!-- Общая статистика -->
+        <div class="stats-summary">
+            <h2>Summary</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">@devices?.Count</div>
+                    <div class="stat-label">Total Devices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">@services?.Count</div>
+                    <div class="stat-label">Total Services</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">@details?.Count</div>
+                    <div class="stat-label">Total Parts</div>
+                </div>
+                <div class="stat-card">
+                    @{
+                        var totalSpent = (services?.Sum(s => s.CostOfService) ?? 0) +
+                        (details?.Sum(d => d.CostOfDetail) ?? 0);
+                    }
+                    <div class="stat-number">@totalSpent ₽</div>
+                    <div class="stat-label">Total Spent</div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="error-message">
+            <h2>Client not found</h2>
+            <p>No client found with phone: @ViewBag.SearchPhone</p>
+        </div>
+    }
+</div>
+

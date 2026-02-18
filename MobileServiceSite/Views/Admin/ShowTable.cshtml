@@ -1,0 +1,67 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = ViewBag.TableName;
+}
+<a href="/Admin" class="back-btn">← Back to Admin</a>
+
+<div class="table-container">
+    @if (Model is System.Collections.IEnumerable)
+    {
+        <table class="data-table">
+            <thead>
+                <tr>
+                    @{
+                        var props = Model.GetType().GetGenericArguments()[0].GetProperties();
+                        var excludeNames = new string[] { "Client", "Details", "Services", "Device" };
+
+                        foreach (var prop in props)
+                        {
+                            bool show = true;
+                            foreach (var exclude in excludeNames)
+                            {
+                                if (prop.Name.Contains(exclude))
+                                {
+                                    show = false;
+                                    break;
+                                }
+                            }
+                            if (show && !prop.GetGetMethod().IsVirtual)
+                            {
+                                <th>@prop.Name</th>
+                            }
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @{
+                            var itemProps = item.GetType().GetProperties();
+
+                            foreach (var prop in itemProps)
+                            {
+                                bool show = true;
+
+                                foreach (var exclude in excludeNames)
+                                {
+                                    if (prop.Name.Contains(exclude))
+                                    {
+                                        show = false;
+                                        break;
+                                    }
+                                }
+
+                                if (show && !prop.GetGetMethod().IsVirtual)
+                                {
+                                    <td>@prop.GetValue(item)</td>
+                                }
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

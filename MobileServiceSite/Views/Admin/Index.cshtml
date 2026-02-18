@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Admin page";
+}
+
+<div class="register">
+
+    <div class="tables-section">
+        <h2>View Database Tables</h2>
+        <div class="table-buttons">
+            @foreach (var table in ViewBag.Tables)
+            {
+                <a href="/ShowTable?tableName=@table" class="table-btn">
+                    View @table
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <div class="search-section">
+            <h2>🔍 Search Client by Phone</h2>
+            <form method="get" action="/Admin/SearchClient" class="search-form">
+                <div class="search-group">
+                    <input type="text" name="phone" placeholder="Enter client phone number"
+                           pattern="\+?[0-9\s\-\(\)]+" required />
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+            </form>
+        </div>
+
+    <div class="admin-container">
+
+            <div class="section register-section">
+                <h2>Add New Records</h2>
+                <p class="section-description">Register new entries in the system</p>
+                <div class="button-grid">
+                    <a href="/Register?registerName=Clients" class="admin-btn add-btn">
+                        
+                        <span class="btn-text">Add New Client</span>
+                    </a>
+                    <a href="/Register?registerName=Devices" class="admin-btn add-btn">
+                        
+                        <span class="btn-text">Add New Device</span>
+                    </a>
+                    <a href="/Register?registerName=Details" class="admin-btn add-btn">
+                        
+                        <span class="btn-text">Add New Part</span>
+                    </a>
+                    <a href="Register?registerName=Services" class="admin-btn add-btn">
+                       
+                        <span class="btn-text">Add New Service</span>
+                    </a>
+                    <a href="/Register?registerName=Category" class="admin-btn add-btn">
+          
+                        <span class="btn-text">Add New Category</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
