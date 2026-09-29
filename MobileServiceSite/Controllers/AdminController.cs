@@ -195,13 +195,11 @@ namespace MobileServiceSite.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterDetail(Detail details, int device_id, string type_of_detail, int cost_of_detail, string producer_det)
+        public async Task<IActionResult> RegisterDetail(int device_id, string type_of_detail, int cost_of_detail, string producer_det)
         {
             ModelState.Clear();
             if (ModelState.IsValid)
             {
-    
-
                 var lastId = _context.Details.Any() ? _context.Details.Max(d => d.Id) : 0;
                 var detail = new Detail
                 {

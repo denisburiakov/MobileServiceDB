@@ -9,7 +9,6 @@ namespace MobileServiceSite.Controllers
             return View();
         }
         [HttpPost]
-        [HttpPost]
         public IActionResult Authenticate(string password)
         {
             if (password == "11081488")

@@ -29,7 +29,12 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Service> Services { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=mobileservice_db;User Id=postgres;Password=11081488;");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseNpgsql("Host=db;Port=5432;Database=my_database_name;Username=my_db_user;Password=my_db_password");
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
