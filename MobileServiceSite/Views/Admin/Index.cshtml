@@ -5,6 +5,14 @@
 
 <div class="register">
 
+    @if (ViewBag.NewPaymentCount != null && ViewBag.NewPaymentCount > 0)
+    {
+        <div class="payments-alert">
+            💰 <strong>@ViewBag.NewPaymentCount</strong> заказ(ов) оплачено — клиенты ждут, когда вы приступите к работе.
+            <a href="/Admin/Orders" class="mini-btn btn-work">Перейти к заказам</a>
+        </div>
+    }
+
     <div class="tables-section">
         <h2>View Database Tables</h2>
         <div class="table-buttons">
@@ -14,6 +22,9 @@
                     View @table
                 </a>
             }
+            <a href="/Admin/Orders" class="table-btn">
+                📋 Orders
+            </a>
         </div>
     </div>
 

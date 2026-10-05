@@ -1,0 +1,126 @@
+﻿@model List<MobileServiceSite.Models.Order>
+@{
+    ViewData["Title"] = "Заказы";
+    var newPayments = ViewBag.NewPayments as List<MobileServiceSite.Models.Order>;
+}
+
+<div class="client-info-container">
+    <a href="/Admin" class="back-btn">← Back to Admin</a>
+
+    <h1>📋 Заказы</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-error">@TempData["ErrorMessage"]</div>
+    }
+
+    <!-- Уведомления об оплате -->
+    @if (newPayments != null && newPayments.Any())
+    {
+        <div class="payments-alert">
+            <h2>💰 Новые оплаты (@newPayments.Count) — можно приступать к работе</h2>
+            @foreach (var o in newPayments)
+            {
+                <div class="payment-item">
+                    <span>
+                        Заказ №@o.Id — @o.Client.FirstName @o.Client.LastName
+                        (@o.Client.Phone), @o.Device.Producer @o.Device.Model,
+                        <strong>@o.Price BYN</strong>, оплачен @o.PaidAt?.ToString("dd.MM.yyyy HH:mm")
+                    </span>
+                    <form method="post" action="/Admin/StartWork">
+                        <input type="hidden" name="order_id" value="@o.Id" />
+                        <button type="submit" class="mini-btn btn-work">🛠 Приступить к работе</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Сводка -->
+    <div class="stats-summary">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.WaitingPriceCount</div>
+                <div class="stat-label">Ждут цены</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.AwaitingPaymentCount</div>
+                <div class="stat-label">Ждут оплаты</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@(newPayments?.Count ?? 0)</div>
+                <div class="stat-label">Оплачено</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.InWorkCount</div>
+                <div class="stat-label">В работе</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Список заказов -->
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var order in Model)
+        {
+            <div class="order-card admin-order-card">
+                <div class="order-head">
+                    <h4>Заказ №@order.Id</h4>
+                    <span class="order-status">@MobileServiceSite.Models.OrderStatus.Display(order.Status)</span>
+                </div>
+
+                <p><strong>Клиент:</strong> @order.Client.FirstName @order.Client.LastName (@order.Client.Phone)</p>
+                <p><strong>Устройство:</strong> @order.Device.Producer @order.Device.Model, S/N @order.Device.SerialNumber</p>
+                <p><strong>Описание:</strong> @order.Description</p>
+                <p>
+                    <strong>Цена:</strong>
+                    @(order.Price.HasValue ? order.Price + " BYN" : "не установлена")
+                </p>
+                <p class="order-date">Создан: @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+
+                @if (order.Status == MobileServiceSite.Models.OrderStatus.Created)
+                {
+                    <!-- Админ ставит цену -->
+                    <form method="post" action="/Admin/SetOrderPrice" class="price-form">
+                        <input type="hidden" name="order_id" value="@order.Id" />
+                        <input type="number" name="price" min="1" step="1" required placeholder="Цена, BYN" />
+                        <button type="submit" class="mini-btn btn-price">💰 Установить цену</button>
+                    </form>
+                }
+                else if (order.Status == MobileServiceSite.Models.OrderStatus.AwaitingPayment)
+                {
+                    <span class="order-note note-wait">⏳ Цена @order.Price BYN установлена @order.PriceSetAt?.ToString("dd.MM.yyyy HH:mm") — ждём оплату клиента</span>
+                }
+                else if (order.Status == MobileServiceSite.Models.OrderStatus.Paid)
+                {
+                    <span class="order-note note-paid">✅ Оплачено @order.PaidAt?.ToString("dd.MM.yyyy HH:mm") — клиент подтвердил оплату</span>
+                    <form method="post" action="/Admin/StartWork" class="inline-form">
+                        <input type="hidden" name="order_id" value="@order.Id" />
+                        <button type="submit" class="mini-btn btn-work">🛠 Приступить к работе</button>
+                    </form>
+                }
+                else if (order.Status == MobileServiceSite.Models.OrderStatus.InProgress)
+                {
+                    <span class="order-note note-work">🛠 Работа выполняется</span>
+                    <form method="post" action="/Admin/CompleteOrder" class="inline-form">
+                        <input type="hidden" name="order_id" value="@order.Id" />
+                        <button type="submit" class="mini-btn btn-done">✅ Заказ выполнен</button>
+                    </form>
+                }
+                else if (order.Status == MobileServiceSite.Models.OrderStatus.Completed)
+                {
+                    <span class="order-note note-done">✅ Заказ закрыт</span>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <p class="no-data">Заказов пока нет</p>
+    }
+</div>

@@ -23,5 +23,7 @@ public partial class Device
 
     public virtual ICollection<Detail> Details { get; set; } = new List<Detail>();
 
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
     public virtual ICollection<Service> Services { get; set; } = new List<Service>();
 }

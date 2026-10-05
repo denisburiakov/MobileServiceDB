@@ -4,12 +4,27 @@
     var devices = ViewBag.Devices as List<MobileServiceSite.Models.Device>;
     var services = ViewBag.Services as List<MobileServiceSite.Models.Service>;
     var details = ViewBag.Details as List<MobileServiceSite.Models.Detail>;
+    var orders = ViewBag.Orders as List<MobileServiceSite.Models.Order>;
 }
 
 <div class="client-info-container">
     <a href="/" class="back-btn">← На главную</a>
 
     <h1>👤 Личный кабинет</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            @TempData["ErrorMessage"]
+        </div>
+    }
 
     @if (client != null)
     {
@@ -95,6 +110,85 @@
             else
             {
                 <p class="no-data">У вас пока нет зарегистрированных устройств</p>
+            }
+        </div>
+
+        <!-- ===================== ЗАКАЗЫ ===================== -->
+        <div class="orders-section">
+            <h2>📋 Мои заказы (@orders?.Count)</h2>
+
+            <!-- Создание заказа -->
+            @if (devices != null && devices.Any())
+            {
+                <div class="order-create">
+                    <h3>Создать новый заказ</h3>
+                    <form method="post" action="/Client/CreateOrder" class="order-form">
+                        <input type="hidden" name="client_id" value="@client.Id" />
+                        <div class="form-group">
+                            <label for="order_device">Устройство</label>
+                            <select name="device_id" id="order_device" required>
+                                @foreach (var d in devices)
+                                {
+                                    <option value="@d.Id">@d.Producer @d.Model (@d.SerialNumber)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="order_description">Что нужно сделать</label>
+                            <textarea name="description" id="order_description" rows="3" required
+                                      placeholder="Опишите проблему или желаемую работу"></textarea>
+                        </div>
+                        <button type="submit" class="order-btn">➕ Создать заказ</button>
+                    </form>
+                    <p class="order-hint">После создания администратор установит цену — затем заказ можно будет оплатить.</p>
+                </div>
+            }
+
+            <!-- Список заказов -->
+            @if (orders != null && orders.Any())
+            {
+                @foreach (var order in orders)
+                {
+                    <div class="order-card">
+                        <div class="order-head">
+                            <h4>Заказ №@order.Id</h4>
+                            <span class="order-status">@OrderStatus.Display(order.Status)</span>
+                        </div>
+
+                        <p><strong>Устройство:</strong> @order.Device.Producer @order.Device.Model</p>
+                        <p><strong>Описание:</strong> @order.Description</p>
+                        <p>
+                            <strong>Цена:</strong>
+                            @(order.Price.HasValue ? order.Price + " BYN" : "не установлена")
+                        </p>
+                        <p class="order-date">Создан: @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+
+                        @if (order.Status == MobileServiceSite.Models.OrderStatus.Created)
+                        {
+                            <span class="order-note note-wait">⏳ Ожидает установки цены администратором</span>
+                        }
+                        else if (order.Status == MobileServiceSite.Models.OrderStatus.AwaitingPayment)
+                        {
+                            <a href="/Client/Pay/@order.Id" class="pay-btn">💳 Оплатить @order.Price BYN</a>
+                        }
+                        else if (order.Status == MobileServiceSite.Models.OrderStatus.Paid)
+                        {
+                            <span class="order-note note-paid">✅ Оплачено @order.PaidAt?.ToString("dd.MM.yyyy HH:mm") — администратор получил уведомление</span>
+                        }
+                        else if (order.Status == MobileServiceSite.Models.OrderStatus.InProgress)
+                        {
+                            <span class="order-note note-work">🛠 Ваш заказ в работе</span>
+                        }
+                        else if (order.Status == MobileServiceSite.Models.OrderStatus.Completed)
+                        {
+                            <span class="order-note note-done">✅ Заказ выполнен</span>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="no-data">У вас пока нет заказов</p>
             }
         </div>
     }

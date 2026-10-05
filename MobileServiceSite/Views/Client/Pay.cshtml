@@ -1,0 +1,50 @@
+﻿@model MobileServiceSite.Models.Order
+@{
+    ViewData["Title"] = "Оплата заказа";
+}
+
+<div class="client-info-container">
+    <a href="/Client/Account/@Model.ClientId" class="back-btn">← Назад в личный кабинет</a>
+
+    <h1>💳 Оплата заказа №@Model.Id</h1>
+
+    <div class="pay-card">
+        <div class="pay-rows">
+            <div class="detail-row">
+                <span class="label">Заказ</span>
+                <span class="value">№@Model.Id</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Клиент</span>
+                <span class="value">@Model.Client.FirstName @Model.Client.LastName</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Устройство</span>
+                <span class="value">@Model.Device.Producer @Model.Device.Model</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Описание</span>
+                <span class="value">@Model.Description</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Цена установлена</span>
+                <span class="value">@(Model.PriceSetAt?.ToString("dd.MM.yyyy HH:mm") ?? "—")</span>
+            </div>
+        </div>
+
+        <div class="pay-amount">
+            К оплате: <strong>@Model.Price BYN</strong>
+        </div>
+
+        <form method="post" action="/Client/ConfirmPayment" class="pay-form">
+            <input type="hidden" name="order_id" value="@Model.Id" />
+            <button type="submit" class="pay-confirm-btn">✅ Подтвердить оплату</button>
+            <a href="/Client/Account/@Model.ClientId" class="pay-cancel-btn">Отмена</a>
+        </form>
+
+        <p class="order-hint">
+            Демо-режим: реальные деньги не списываются. После подтверждения заказ получит статус
+            «Оплачен», администратор увидит уведомление и сможет приступить к работе.
+        </p>
+    </div>
+</div>

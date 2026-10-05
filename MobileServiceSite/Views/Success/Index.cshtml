@@ -4,8 +4,15 @@
 }
 
 <div class="success-page">
-    <h1>Registration Successful!</h1>
-    <p>Your information has been saved successfully.</p>
+    <h1>Success!</h1>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <p style="color: #28a745; font-size: 18px;">@TempData["SuccessMessage"]</p>
+    }
+    else
+    {
+        <p>Your information has been saved successfully.</p>
+    }
 
     <div class="back-home">
         <a href="/" class="home-link">← Back to Home Page</a>

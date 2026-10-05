@@ -36,6 +36,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/dexpry/MobileServiceDB/MobileServiceSite/Views/Admin/Orders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vT3JkZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/dexpry/MobileServiceDB/MobileServiceSite/Views/Admin/RegisterCategory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vUmVnaXN0ZXJDYXRlZ29yeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -70,6 +74,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/dexpry/MobileServiceDB/MobileServiceSite/Views/Client/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2xpZW50L0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/dexpry/MobileServiceDB/MobileServiceSite/Views/Client/Pay.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2xpZW50L1BheS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/dexpry/MobileServiceDB/MobileServiceSite/Views/Home/Index.cshtml]

@@ -26,6 +26,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Device> Devices { get; set; }
 
+    public virtual DbSet<Order> Orders { get; set; }
+
     public virtual DbSet<Service> Services { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -150,6 +152,46 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.Client).WithMany(p => p.Devices)
                 .HasForeignKey(d => d.ClientId)
                 .HasConstraintName("devices_client_id_fkey");
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("orders_pkey");
+
+            entity.ToTable("orders");
+
+            entity.HasIndex(e => e.ClientId, "idx_orders_client_id");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.ClientId).HasColumnName("client_id");
+            entity.Property(e => e.DeviceId).HasColumnName("device_id");
+            entity.Property(e => e.Description)
+                .HasMaxLength(500)
+                .HasColumnName("description");
+            entity.Property(e => e.Price).HasColumnName("price");
+            entity.Property(e => e.Status)
+                .HasMaxLength(30)
+                .HasColumnName("status");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnName("created_at")
+                .HasColumnType("timestamp without time zone")
+                .HasDefaultValueSql("now()");
+            entity.Property(e => e.PriceSetAt)
+                .HasColumnName("price_set_at")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.PaidAt)
+                .HasColumnName("paid_at")
+                .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.Client).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.ClientId)
+                .HasConstraintName("orders_client_id_fkey");
+
+            entity.HasOne(d => d.Device).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.DeviceId)
+                .HasConstraintName("orders_device_id_fkey");
         });
 
         modelBuilder.Entity<Service>(entity =>

@@ -120,7 +120,6 @@
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/scopedcss/bundle/MobileServiceSite.styles.css
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/scopedcss/projectbundle/MobileServiceSite.bundle.scp.css
-/Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/compressed/m9op4eqky2-yixd5hgmlc.gz
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/compressed/07ueahsx8r-61n19gt1b8.gz
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/compressed/7gq4ijhc0u-fr7q2aak1r.gz
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/compressed/v8dg69i5xk-bqjiyaj88i.gz
@@ -194,3 +193,4 @@
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/MobileServiceSite.pdb
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/MobileServiceSite.genruntimeconfig.cache
 /Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/ref/MobileServiceSite.dll
+/Users/dexpry/MobileServiceDB/MobileServiceSite/obj/Debug/net9.0/compressed/m9op4eqky2-6rebxui72s.gz

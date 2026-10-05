@@ -12,7 +12,7 @@
                 <tr>
                     @{
                         var props = Model.GetType().GetGenericArguments()[0].GetProperties();
-                        var excludeNames = new string[] { "Client", "Details", "Services", "Device" };
+                        var excludeNames = new string[] { "Client", "Details", "Services", "Device", "Category" };
 
                         foreach (var prop in props)
                         {

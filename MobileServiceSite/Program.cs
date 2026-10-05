@@ -16,7 +16,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        context.Database.EnsureCreated(); // Создаст базу и таблицы, если их еще нет
+        DatabaseInitializer.Initialize(context); // Создаст базу, таблицы и таблицу заказов, если их еще нет
     }
     catch (Exception ex)
     {

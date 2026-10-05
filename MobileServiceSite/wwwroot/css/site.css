@@ -612,3 +612,345 @@ h1 {
         margin-top: 0;
         color: #721c24;
     }
+/* ===================== ЗАКАЗЫ И ОПЛАТА ===================== */
+
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.alert-success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.orders-section {
+    margin-bottom: 30px;
+}
+
+    .orders-section h2 {
+        color: #333;
+        font-size: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #28a745;
+    }
+
+.order-create {
+    background: #f8f9fa;
+    border: 1px dashed #28a745;
+    border-radius: 6px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+    .order-create h3 {
+        margin-top: 0;
+        color: #333;
+        font-size: 16px;
+        margin-bottom: 14px;
+    }
+
+.order-form .form-group {
+    margin-bottom: 12px;
+}
+
+.order-form label {
+    display: block;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.order-form select,
+.order-form textarea {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.order-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+    .order-btn:hover {
+        background: #218838;
+    }
+
+.order-hint {
+    color: #6c757d;
+    font-size: 13px;
+    margin: 12px 0 0;
+}
+
+.order-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-left: 4px solid #6c757d;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+    .order-card p {
+        margin: 5px 0;
+        color: #444;
+        font-size: 14px;
+    }
+
+.order-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+    .order-head h4 {
+        margin: 0;
+        color: #007bff;
+        font-size: 16px;
+    }
+
+.order-status {
+    background: #e9ecef;
+    color: #495057;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.order-date {
+    color: #6c757d;
+    font-size: 13px !important;
+}
+
+.order-note {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.note-wait {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.note-paid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.note-work {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.note-done {
+    background: #d4edda;
+    color: #155724;
+}
+
+.pay-btn {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    padding: 9px 18px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+    .pay-btn:hover {
+        background: #0056b3;
+    }
+
+/* Страница оплаты */
+.pay-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-left: 4px solid #007bff;
+    border-radius: 8px;
+    padding: 22px;
+}
+
+    .pay-card .pay-rows {
+        margin-bottom: 18px;
+    }
+
+.pay-amount {
+    background: white;
+    border: 2px solid #007bff;
+    border-radius: 6px;
+    text-align: center;
+    padding: 18px;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 18px;
+}
+
+    .pay-amount strong {
+        font-size: 24px;
+        color: #007bff;
+    }
+
+.pay-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.pay-confirm-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .pay-confirm-btn:hover {
+        background: #218838;
+    }
+
+.pay-cancel-btn {
+    display: inline-block;
+    padding: 12px 18px;
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+    .pay-cancel-btn:hover {
+        background: #545b62;
+    }
+
+/* Уведомления админа об оплате */
+.payments-alert {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-left: 4px solid #ffc107;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 20px;
+    color: #856404;
+}
+
+    .payments-alert h2 {
+        margin: 0 0 12px;
+        font-size: 16px;
+        color: #856404;
+    }
+
+.payment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin: 8px 0;
+    font-size: 14px;
+    color: #333;
+    flex-wrap: wrap;
+}
+
+    .payment-item form {
+        margin: 0;
+    }
+
+.mini-btn {
+    border: none;
+    padding: 7px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-price {
+    background: #fd7e14;
+    color: white;
+}
+
+    .btn-price:hover {
+        background: #e8590c;
+    }
+
+.btn-work {
+    background: #17a2b8;
+    color: white;
+}
+
+    .btn-work:hover {
+        background: #138496;
+    }
+
+.btn-done {
+    background: #28a745;
+    color: white;
+}
+
+    .btn-done:hover {
+        background: #218838;
+    }
+
+.price-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+    .price-form input[type="number"] {
+        padding: 8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 14px;
+        width: 140px;
+    }
+
+.inline-form {
+    margin-top: 8px;
+}
+
+.admin-order-card {
+    border-left-color: #6f42c1;
+}

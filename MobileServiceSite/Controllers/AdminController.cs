@@ -29,6 +29,9 @@ namespace MobileServiceSite.Controllers
             ViewBag.DetailCount = _context.Details.Count();
             ViewBag.CategoryCount = _context.Categories.Count();
 
+            // Сколько заказов оплачено и ждут, когда админ приступит к работе
+            ViewBag.NewPaymentCount = _context.Orders.Count(o => o.Status == OrderStatus.Paid);
+
             ViewBag.Tables = new List<string>
             {
                 "Clients", "Devices", "Category", "Services", "Details"
@@ -318,6 +321,119 @@ namespace MobileServiceSite.Controllers
             ViewBag.SearchPhone = phone;
 
             return View("ClientInfo");
+        }
+
+        // ================= ЗАКАЗЫ =================
+
+        // Список заказов: новые, ждущие цены, оплаченные, в работе
+        [HttpGet]
+        [Route("Admin/Orders")]
+        public async Task<IActionResult> Orders()
+        {
+            var orders = await _context.Orders
+                .Include(o => o.Client)
+                .Include(o => o.Device)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+
+            // Уведомления об оплате: заказ оплачен, но работа ещё не начата
+            ViewBag.NewPayments = orders
+                .Where(o => o.Status == OrderStatus.Paid)
+                .ToList();
+            ViewBag.WaitingPriceCount = orders.Count(o => o.Status == OrderStatus.Created);
+            ViewBag.AwaitingPaymentCount = orders.Count(o => o.Status == OrderStatus.AwaitingPayment);
+            ViewBag.InWorkCount = orders.Count(o => o.Status == OrderStatus.InProgress);
+            ViewBag.CompletedCount = orders.Count(o => o.Status == OrderStatus.Completed);
+
+            return View(orders);
+        }
+
+        // Админ устанавливает цену по заказу
+        [HttpPost]
+        [Route("Admin/SetOrderPrice")]
+        public async Task<IActionResult> SetOrderPrice(int order_id, int price)
+        {
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(o => o.Id == order_id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            if (order.Status != OrderStatus.Created || order.Price != null)
+            {
+                TempData["ErrorMessage"] = $"По заказу №{order.Id} цена уже установлена";
+                return RedirectToAction("Orders");
+            }
+
+            if (price <= 0)
+            {
+                TempData["ErrorMessage"] = "Цена должна быть больше нуля";
+                return RedirectToAction("Orders");
+            }
+
+            order.Price = price;
+            order.Status = OrderStatus.AwaitingPayment;
+            order.PriceSetAt = DateTime.Now;
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] =
+                $"Заказ №{order.Id}: цена {price} BYN установлена. Клиент получил возможность оплатить заказ.";
+            return RedirectToAction("Orders");
+        }
+
+        // Админ приступает к работе после получения подтверждения об оплате
+        [HttpPost]
+        [Route("Admin/StartWork")]
+        public async Task<IActionResult> StartWork(int order_id)
+        {
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(o => o.Id == order_id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            if (order.Status != OrderStatus.Paid)
+            {
+                TempData["ErrorMessage"] =
+                    $"Заказ №{order.Id} нельзя взять в работу: нет подтверждения об оплате";
+                return RedirectToAction("Orders");
+            }
+
+            order.Status = OrderStatus.InProgress;
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Заказ №{order.Id} оплачен — работа начата";
+            return RedirectToAction("Orders");
+        }
+
+        // Заказ выполнен
+        [HttpPost]
+        [Route("Admin/CompleteOrder")]
+        public async Task<IActionResult> CompleteOrder(int order_id)
+        {
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(o => o.Id == order_id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            if (order.Status != OrderStatus.InProgress)
+            {
+                TempData["ErrorMessage"] = $"Заказ №{order.Id} не находится в работе";
+                return RedirectToAction("Orders");
+            }
+
+            order.Status = OrderStatus.Completed;
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Заказ №{order.Id} выполнен";
+            return RedirectToAction("Orders");
         }
     }
 }
