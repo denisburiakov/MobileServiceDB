@@ -36,16 +36,16 @@
                     <span class="value">@client.Id</span>
                 </div>
                 <div class="detail-row">
-                    <span class="label">Full Name:</span>
+                    <span class="label">ФИО:</span>
                     <span class="value">@client.FirstName @client.LastName</span>
                 </div>
                 <div class="detail-row">
-                    <span class="label">Phone:</span>
+                    <span class="label">Телефон:</span>
                     <span class="value">@client.Phone</span>
                 </div>
                 <div class="detail-row">
                     <span class="label">Email:</span>
-                    <span class="value">@(client.Email ?? "Not specified")</span>
+                    <span class="value">@(client.Email ?? "не указан")</span>
                 </div>
             </div>
         </div>
@@ -60,9 +60,9 @@
                     <div class="device-card">
                         <h3>@device.Producer @device.Model</h3>
                         <div class="device-details">
-                            <p><strong>Type:</strong> @device.TypeOfDevice</p>
-                            <p><strong>Serial:</strong> @device.SerialNumber</p>
-                            <p><strong>Problem:</strong> @device.DefDescriotion</p>
+                            <p><strong>Тип:</strong> @device.TypeOfDevice</p>
+                            <p><strong>Серийный номер:</strong> @device.SerialNumber</p>
+                            <p><strong>Проблема:</strong> @device.DefDescriotion</p>
                         </div>
 
                         @{
@@ -76,11 +76,11 @@
                                 {
                                     <div class="service-item">
                                         <p><strong>@service.TypeOfService</strong></p>
-                                        <p>Cost: @service.CostOfService BYN</p>
-                                        <p>Time: @(service.TimeOfDoing ?? "Not specified")</p>
+                                        <p>Стоимость: @service.CostOfService BYN</p>
+                                        <p>Время: @(service.TimeOfDoing ?? "не указано")</p>
                                         @if (service.Category != null)
                                         {
-                                            <p>Category: @service.Category.Categories</p>
+                                            <p>Категория: @service.Category.Categories</p>
                                         }
                                     </div>
                                 }
@@ -98,8 +98,8 @@
                                 {
                                     <div class="detail-item">
                                         <p><strong>@detail.TypeOfDetail</strong></p>
-                                        <p>Manufacturer: @detail.ProducerDet</p>
-                                        <p>Cost: @detail.CostOfDetail BYN</p>
+                                        <p>Производитель: @detail.ProducerDet</p>
+                                        <p>Стоимость: @detail.CostOfDetail BYN</p>
                                     </div>
                                 }
                             </div>
@@ -109,49 +109,85 @@
             }
             else
             {
-                <p class="no-data">У вас пока нет зарегистрированных устройств</p>
+                <p class="no-data">Устройств пока нет — добавьте первое прямо при создании заявки ниже</p>
             }
         </div>
 
-        <!-- ===================== ЗАКАЗЫ ===================== -->
+        <!-- ===================== ЗАЯВКИ ===================== -->
         <div class="orders-section">
-            <h2>📋 Мои заказы (@orders?.Count)</h2>
+            <h2>📋 Мои заявки на ремонт (@orders?.Count)</h2>
 
-            <!-- Создание заказа -->
-            @if (devices != null && devices.Any())
-            {
-                <div class="order-create">
-                    <h3>Создать новый заказ</h3>
-                    <form method="post" action="/Client/CreateOrder" class="order-form">
-                        <input type="hidden" name="client_id" value="@client.Id" />
-                        <div class="form-group">
-                            <label for="order_device">Устройство</label>
-                            <select name="device_id" id="order_device" required>
+            <!-- Новая заявка: устройство и неисправность заполняет сам клиент -->
+            <div class="order-create">
+                <h3>Создать заявку на ремонт</h3>
+                <form method="post" action="/Client/CreateRequest" class="order-form" id="requestForm">
+                    <input type="hidden" name="client_id" value="@client.Id" />
+
+                    <div class="form-group">
+                        <label for="order_device">Устройство</label>
+                        <select name="device_id" id="order_device">
+                            <option value="0">➕ Новое устройство — ввести данные</option>
+                            @if (devices != null)
+                            {
                                 @foreach (var d in devices)
                                 {
                                     <option value="@d.Id">@d.Producer @d.Model (@d.SerialNumber)</option>
                                 }
-                            </select>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Данные нового устройства: заполняет клиент -->
+                    <div id="newDeviceFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="device_type">Тип устройства</label>
+                            <input type="text" id="device_type" name="device_type" maxlength="50"
+                                   placeholder="Например: смартфон, ноутбук, планшет" />
                         </div>
                         <div class="form-group">
-                            <label for="order_description">Что нужно сделать</label>
-                            <textarea name="description" id="order_description" rows="3" required
-                                      placeholder="Опишите проблему или желаемую работу"></textarea>
+                            <label for="producer">Производитель</label>
+                            <input type="text" id="producer" name="producer" maxlength="50"
+                                   placeholder="Например: Apple, Samsung, Xiaomi" />
                         </div>
-                        <button type="submit" class="order-btn">➕ Создать заказ</button>
-                    </form>
-                    <p class="order-hint">После создания администратор установит цену — затем заказ можно будет оплатить.</p>
-                </div>
-            }
+                        <div class="form-group">
+                            <label for="model">Модель</label>
+                            <input type="text" id="model" name="model" maxlength="50"
+                                   placeholder="Например: iPhone 13" />
+                        </div>
+                        <div class="form-group">
+                            <label for="serial_number">Серийный номер <span class="optional">(необязательно)</span></label>
+                            <input type="text" id="serial_number" name="serial_number" maxlength="50"
+                                   placeholder="Если он у вас есть" />
+                        </div>
+                        <div class="form-group">
+                            <label for="device_problem">Что случилось с устройством</label>
+                            <textarea id="device_problem" name="device_problem" rows="2" maxlength="50"
+                                      placeholder="Кратко опишите неисправность"></textarea>
+                        </div>
+                    </div>
 
-            <!-- Список заказов -->
+                    <div class="form-group">
+                        <label for="order_description">Что нужно сделать</label>
+                        <textarea name="description" id="order_description" rows="3" maxlength="500" required
+                                  placeholder="Опишите проблему или желаемую работу"></textarea>
+                    </div>
+
+                    <button type="submit" class="order-btn">➕ Создать заявку</button>
+                </form>
+                <p class="order-hint">
+                    Заявку составляете вы сами: выбираете устройство (или добавляете новое) и описываете неисправность.
+                    После этого администратор посмотрит заявку, установит цену — и вы сможете её оплатить.
+                </p>
+            </div>
+
+            <!-- Список заявок -->
             @if (orders != null && orders.Any())
             {
                 @foreach (var order in orders)
                 {
                     <div class="order-card">
                         <div class="order-head">
-                            <h4>Заказ №@order.Id</h4>
+                            <h4>Заявка №@order.Id</h4>
                             <span class="order-status">@OrderStatus.Display(order.Status)</span>
                         </div>
 
@@ -161,7 +197,7 @@
                             <strong>Цена:</strong>
                             @(order.Price.HasValue ? order.Price + " BYN" : "не установлена")
                         </p>
-                        <p class="order-date">Создан: @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+                        <p class="order-date">Создана: @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
 
                         @if (order.Status == MobileServiceSite.Models.OrderStatus.Created)
                         {
@@ -188,7 +224,7 @@
             }
             else
             {
-                <p class="no-data">У вас пока нет заказов</p>
+                <p class="no-data">Заявок пока нет</p>
             }
         </div>
     }
@@ -197,3 +233,34 @@
         <p>Клиент не найден.</p>
     }
 </div>
+
+@if (client != null)
+{
+    <script>
+        (function () {
+            var select = document.getElementById('order_device');
+            var fields = document.getElementById('newDeviceFields');
+            if (!select || !fields) return;
+
+            function toggle() {
+                var isNew = select.value === '0';
+                fields.style.display = isNew ? 'block' : 'none';
+
+                // Для нового устройства обязательны тип, производитель и модель
+                var ids = ['device_type', 'producer', 'model'];
+                ids.forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (!el) return;
+                    if (isNew) {
+                        el.setAttribute('required', 'required');
+                    } else {
+                        el.removeAttribute('required');
+                    }
+                });
+            }
+
+            select.addEventListener('change', toggle);
+            toggle();
+        })();
+    </script>
+}

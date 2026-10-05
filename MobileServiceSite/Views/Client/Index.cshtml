@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Client page";
+    ViewData["Title"] = "Клиент";
 }
 <div class="client-register">
     <h2>Регистрация клиента</h2>
@@ -12,26 +12,26 @@
 
     <form method="post" class="client-form">
         <div class="form-group">
-            <label for="first_name"><b>First Name</b></label>
-            <input type="text" placeholder="Enter..." name="first_name" required />
+            <label for="first_name"><b>Имя</b></label>
+            <input type="text" placeholder="Введите..." name="first_name" required />
         </div>
 
         <div class="form-group">
-            <label for="last_name"><b>Last Name</b></label>
-            <input type="text" placeholder="Enter..." name="last_name" required />
+            <label for="last_name"><b>Фамилия</b></label>
+            <input type="text" placeholder="Введите..." name="last_name" required />
         </div>
 
         <div class="form-group">
-            <label for="phone"><b>Phone Number</b></label>
-            <input type="text" placeholder="Enter..." name="phone" required />
+            <label for="phone"><b>Номер телефона</b></label>
+            <input type="text" placeholder="Введите..." name="phone" required />
         </div>
 
         <div class="form-group">
             <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter..." name="email" />
+            <input type="text" placeholder="Введите..." name="email" />
         </div>
 
-        <button type="submit" class="registerbtn">Submit</button>
+        <button type="submit" class="registerbtn">Зарегистрироваться</button>
     </form>
 
     <hr />
@@ -39,8 +39,8 @@
     <h3>Уже есть аккаунт?</h3>
     <form method="get" action="/Client/Login" class="client-form">
         <div class="form-group">
-            <label for="phone"><b>Phone Number</b></label>
-            <input type="text" placeholder="Enter your phone..." name="phone" required />
+            <label for="phone"><b>Номер телефона</b></label>
+            <input type="text" placeholder="Введите ваш телефон..." name="phone" required />
         </div>
         <button type="submit" class="registerbtn">Войти в личный кабинет</button>
     </form>

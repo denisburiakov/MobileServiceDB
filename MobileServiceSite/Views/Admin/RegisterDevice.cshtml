@@ -1,44 +1,44 @@
 ﻿@model MobileServiceSite.Models.Device
 @{
-    ViewData["Title"] = "Device Registration";
+    ViewData["Title"] = "Регистрация устройства";
 }
 <div class="client-register">
-    <h2>Device Information</h2>
-    <p class="instruction">Please enter device details</p>
+    <h2>Данные устройства</h2>
+    <p class="instruction">Введите данные устройства. Обычно это заполняет сам клиент при создании заявки — здесь можно добавить устройство вручную.</p>
 
     <form method="post" action="/Admin/RegisterDevice" class="client-form">
         <div class="form-group">
-            <label for="ClientId"><b>Client ID</b></label>
-            <input type="number" placeholder="Please, enter..." name="client_id" required />
-            <small>Find client ID in the clients table</small>
+            <label for="ClientId"><b>ID клиента</b></label>
+            <input type="number" placeholder="Введите..." name="client_id" required />
+            <small>Найти ID клиента можно в таблице клиентов</small>
         </div>
 
         <div class="form-group">
-            <label for="TypeOfDevice"><b>Device Type</b></label>
-            <input type="text" placeholder="Please, enter..." name="type_of_device" required />
+            <label for="TypeOfDevice"><b>Тип устройства</b></label>
+            <input type="text" placeholder="Введите..." name="type_of_device" required />
         </div>
 
         <div class="form-group">
-            <label for="Producer"><b>Manufacturer</b></label>
-            <input type="text" placeholder="Please, enter..." name="producer" required />
+            <label for="Producer"><b>Производитель</b></label>
+            <input type="text" placeholder="Введите..." name="producer" required />
         </div>
 
         <div class="form-group">
-            <label for="Model"><b>Model </b></label>
-            <input type="text" placeholder="Please, enter..." name="model" required />
+            <label for="Model"><b>Модель</b></label>
+            <input type="text" placeholder="Введите..." name="model" required />
         </div>
 
         <div class="form-group">
-            <label for="SerialNumber"><b>Serial Number</b></label>
-            <input type="text" placeholder="Please, enter..." name="serial_number" required />
+            <label for="SerialNumber"><b>Серийный номер</b></label>
+            <input type="text" placeholder="Введите..." name="serial_number" required />
         </div>
 
         <div class="form-group">
-            <label for="DefDescriotion"><b>Problem Description</b></label>
-            <textarea placeholder="Please, enter..." name="def_descriotion" rows="3" required></textarea>
+            <label for="DefDescriotion"><b>Описание проблемы</b></label>
+            <textarea placeholder="Введите..." name="def_descriotion" rows="3" required></textarea>
         </div>
 
-        <button type="submit" class="registerbtn">Register Device</button>
-        <a href="/Admin" class="back-btn">Back to Admin</a>
+        <button type="submit" class="registerbtn">Зарегистрировать устройство</button>
+        <a href="/Admin" class="back-btn">Назад в админ-панель</a>
     </form>
 </div>

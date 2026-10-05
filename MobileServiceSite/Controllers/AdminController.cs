@@ -282,7 +282,7 @@ namespace MobileServiceSite.Controllers
         {
             if (string.IsNullOrEmpty(phone))
             {
-                TempData["ErrorMessage"] = "Please enter phone number";
+                TempData["ErrorMessage"] = "Введите номер телефона";
                 return RedirectToAction("Index");
             }
 
@@ -292,7 +292,7 @@ namespace MobileServiceSite.Controllers
 
             if (client == null)
             {
-                TempData["ErrorMessage"] = $"Client with phone '{phone}' not found";
+                TempData["ErrorMessage"] = $"Клиент с телефоном '{phone}' не найден";
                 return Redirect("/Error");
             }
 
@@ -363,7 +363,7 @@ namespace MobileServiceSite.Controllers
 
             if (order.Status != OrderStatus.Created || order.Price != null)
             {
-                TempData["ErrorMessage"] = $"По заказу №{order.Id} цена уже установлена";
+                TempData["ErrorMessage"] = $"По заявке №{order.Id} цена уже установлена";
                 return RedirectToAction("Orders");
             }
 
@@ -379,7 +379,7 @@ namespace MobileServiceSite.Controllers
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] =
-                $"Заказ №{order.Id}: цена {price} BYN установлена. Клиент получил возможность оплатить заказ.";
+                $"Заявка №{order.Id}: цена {price} BYN установлена. Клиент получил возможность оплатить заказ.";
             return RedirectToAction("Orders");
         }
 
@@ -434,6 +434,180 @@ namespace MobileServiceSite.Controllers
 
             TempData["SuccessMessage"] = $"Заказ №{order.Id} выполнен";
             return RedirectToAction("Orders");
+        }
+
+        // ================= РЕДАКТИРОВАНИЕ =================
+
+        /// <summary>
+        /// Админ правит заявку клиента: данные устройства и описание работы.
+        /// Заявку составляет клиент, админ только корректирует, если что-то указано неверно.
+        /// </summary>
+        [HttpGet]
+        [Route("Admin/EditOrder/{id:int}")]
+        public async Task<IActionResult> EditOrder(int id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.Client)
+                .Include(o => o.Device)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
+        [HttpPost]
+        [Route("Admin/EditOrder/{id:int}")]
+        public async Task<IActionResult> EditOrder(
+            int id,
+            string type_of_device,
+            string producer,
+            string model,
+            string serial_number,
+            string def_descriotion,
+            string description)
+        {
+            var order = await _context.Orders
+                .Include(o => o.Client)
+                .Include(o => o.Device)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            string? error = ValidateDeviceAndDescription(
+                type_of_device, producer, model, serial_number, def_descriotion, description, out var type, out var prod,
+                out var mod, out var serial, out var problem, out var descr);
+
+            if (error != null)
+            {
+                TempData["ErrorMessage"] = error;
+                return RedirectToAction("EditOrder", new { id });
+            }
+
+            order.Device.TypeOfDevice = type!;
+            order.Device.Producer = prod!;
+            order.Device.Model = mod!;
+            order.Device.SerialNumber = serial!;
+            order.Device.DefDescriotion = problem!;
+            order.Description = descr!;
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Заявка №{order.Id} обновлена";
+            return RedirectToAction("Orders");
+        }
+
+        /// <summary>Админ правит данные устройства клиента</summary>
+        [HttpGet]
+        [Route("Admin/EditDevice/{id:int}")]
+        public async Task<IActionResult> EditDevice(int id)
+        {
+            var device = await _context.Devices
+                .Include(d => d.Client)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (device == null)
+            {
+                return NotFound();
+            }
+
+            return View(device);
+        }
+
+        [HttpPost]
+        [Route("Admin/EditDevice/{id:int}")]
+        public async Task<IActionResult> EditDevice(
+            int id,
+            string type_of_device,
+            string producer,
+            string model,
+            string serial_number,
+            string def_descriotion)
+        {
+            var device = await _context.Devices
+                .Include(d => d.Client)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (device == null)
+            {
+                return NotFound();
+            }
+
+            string? error = ValidateDeviceAndDescription(
+                type_of_device, producer, model, serial_number, def_descriotion, "описание",
+                out var type, out var prod, out var mod, out var serial, out var problem, out _);
+
+            if (error != null)
+            {
+                TempData["ErrorMessage"] = error;
+                return RedirectToAction("EditDevice", new { id });
+            }
+
+            device.TypeOfDevice = type!;
+            device.Producer = prod!;
+            device.Model = mod!;
+            device.SerialNumber = serial!;
+            device.DefDescriotion = problem!;
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Данные устройства обновлены";
+            return RedirectToAction("SearchClient", new { phone = device.Client.Phone });
+        }
+
+        /// <summary>
+        /// Общая проверка данных устройства и описания работы.
+        /// Возвращает текст ошибки или null, если всё в порядке.
+        /// </summary>
+        private static string? ValidateDeviceAndDescription(
+            string? typeOfDevice,
+            string? producer,
+            string? model,
+            string? serialNumber,
+            string? defDescription,
+            string? description,
+            out string? type,
+            out string? prod,
+            out string? mod,
+            out string? serial,
+            out string? problem,
+            out string? descr)
+        {
+            type = (typeOfDevice ?? string.Empty).Trim();
+            prod = (producer ?? string.Empty).Trim();
+            mod = (model ?? string.Empty).Trim();
+            serial = (serialNumber ?? string.Empty).Trim();
+            problem = (defDescription ?? string.Empty).Trim();
+            descr = (description ?? string.Empty).Trim();
+
+            if (type.Length == 0 || prod.Length == 0 || mod.Length == 0)
+            {
+                return "Заполните тип устройства, производителя и модель";
+            }
+
+            if (type.Length > 50 || prod.Length > 50 || mod.Length > 50 ||
+                serial.Length > 50 || problem.Length > 50)
+            {
+                return "Слишком длинные данные устройства — максимум 50 символов в поле";
+            }
+
+            if (descr.Length == 0 || descr.Length > 500)
+            {
+                return "Описание заявки должно быть от 1 до 500 символов";
+            }
+
+            if (serial.Length == 0)
+            {
+                serial = "не указан";
+            }
+
+            return null;
         }
     }
 }

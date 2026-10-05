@@ -159,6 +159,137 @@ namespace MobileServiceSite.Controllers
             return RedirectToAction("Account", new { id = client_id });
         }
 
+        /// <summary>
+        /// Клиент сам составляет заявку на ремонт:
+        /// выбирает своё устройство или добавляет новое (тип, производитель,
+        /// модель, серийный номер, описание неисправности) и описывает работу.
+        /// Админ в дальнейшем только правит данные при необходимости.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> CreateRequest(
+            int client_id,
+            int device_id,
+            string? device_type,
+            string? producer,
+            string? model,
+            string? serial_number,
+            string? device_problem,
+            string? description)
+        {
+            var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == client_id);
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            description = (description ?? string.Empty).Trim();
+
+            if (description.Length == 0)
+            {
+                TempData["ErrorMessage"] = "Опишите, что нужно сделать с устройством";
+                return RedirectToAction("Account", new { id = client_id });
+            }
+
+            if (description.Length > 500)
+            {
+                TempData["ErrorMessage"] = "Описание заявки слишком длинное — максимум 500 символов";
+                return RedirectToAction("Account", new { id = client_id });
+            }
+
+            Device device;
+
+            if (device_id > 0)
+            {
+                // Клиент выбрал уже добавленное устройство
+                device = await _context.Devices
+                    .FirstOrDefaultAsync(d => d.Id == device_id && d.ClientId == client_id);
+
+                if (device == null)
+                {
+                    TempData["ErrorMessage"] = "Устройство не найдено. Выберите устройство из списка или добавьте новое.";
+                    return RedirectToAction("Account", new { id = client_id });
+                }
+            }
+            else
+            {
+                // Клиент добавляет новое устройство — данные заполняет он сам
+                device_type = (device_type ?? string.Empty).Trim();
+                producer = (producer ?? string.Empty).Trim();
+                model = (model ?? string.Empty).Trim();
+
+                if (device_type.Length == 0 || producer.Length == 0 || model.Length == 0)
+                {
+                    TempData["ErrorMessage"] = "Заполните тип устройства, производителя и модель";
+                    return RedirectToAction("Account", new { id = client_id });
+                }
+
+                if (device_type.Length > 50 || producer.Length > 50 || model.Length > 50)
+                {
+                    TempData["ErrorMessage"] = "Слишком длинные данные устройства — максимум 50 символов в поле";
+                    return RedirectToAction("Account", new { id = client_id });
+                }
+
+                serial_number = (serial_number ?? string.Empty).Trim();
+                if (serial_number.Length > 50)
+                {
+                    TempData["ErrorMessage"] = "Серийный номер слишком длинный — максимум 50 символов";
+                    return RedirectToAction("Account", new { id = client_id });
+                }
+
+                device_problem = (device_problem ?? string.Empty).Trim();
+                if (device_problem.Length > 50)
+                {
+                    TempData["ErrorMessage"] = "Описание неисправности слишком длинное — максимум 50 символов";
+                    return RedirectToAction("Account", new { id = client_id });
+                }
+
+                // Поля, которые клиент заполнять не обязан, подставляем сами
+                if (serial_number.Length == 0)
+                {
+                    serial_number = "не указан";
+                }
+
+                if (device_problem.Length == 0)
+                {
+                    device_problem = description.Length > 50
+                        ? description[..50]
+                        : description;
+                }
+
+                var lastDeviceId = _context.Devices.Any() ? _context.Devices.Max(d => d.Id) : 0;
+                device = new Device
+                {
+                    Id = lastDeviceId + 1,
+                    ClientId = client_id,
+                    TypeOfDevice = device_type,
+                    Producer = producer,
+                    Model = model,
+                    SerialNumber = serial_number,
+                    DefDescriotion = device_problem
+                };
+                _context.Devices.Add(device);
+                await _context.SaveChangesAsync();
+            }
+
+            var lastOrderId = _context.Orders.Any() ? _context.Orders.Max(o => o.Id) : 0;
+            var order = new Order
+            {
+                Id = lastOrderId + 1,
+                ClientId = client_id,
+                DeviceId = device.Id,
+                Description = description,
+                Status = OrderStatus.Created,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] =
+                $"Заявка №{order.Id} создана. Администратор посмотрит её и установит цену — после этого вы сможете оплатить.";
+            return RedirectToAction("Account", new { id = client_id });
+        }
+
         // Страница оплаты заказа
         [HttpGet]
         [Route("Client/Pay/{id:int}")]

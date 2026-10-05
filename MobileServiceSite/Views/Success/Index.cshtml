@@ -1,20 +1,20 @@
 ﻿
 @{
-    ViewData["Title"] = "Success page";
+    ViewData["Title"] = "Готово";
 }
 
 <div class="success-page">
-    <h1>Success!</h1>
+    <h1>Готово!</h1>
     @if (TempData["SuccessMessage"] != null)
     {
         <p style="color: #28a745; font-size: 18px;">@TempData["SuccessMessage"]</p>
     }
     else
     {
-        <p>Your information has been saved successfully.</p>
+        <p>Ваши данные успешно сохранены.</p>
     }
 
     <div class="back-home">
-        <a href="/" class="home-link">← Back to Home Page</a>
+        <a href="/" class="home-link">← На главную страницу</a>
     </div>
 </div>

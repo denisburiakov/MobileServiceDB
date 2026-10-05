@@ -954,3 +954,91 @@ h1 {
 .admin-order-card {
     border-left-color: #6f42c1;
 }
+
+/* ===== Поля ввода в форме заявки (клиент добавляет устройство сам) ===== */
+.order-form input[type="text"],
+.order-form input[type="number"] {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.order-form .optional {
+    color: #6c757d;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+#newDeviceFields {
+    background: #fff;
+    border: 1px dashed #ced4da;
+    border-radius: 5px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+    #newDeviceFields h4 {
+        margin: 0 0 10px;
+        font-size: 14px;
+        color: #495057;
+    }
+
+.device-card .order-head h3 {
+    margin: 0;
+    color: #007bff;
+    font-size: 17px;
+}
+
+/* ===== Форма редактирования заявки/устройства администратором ===== */
+.edit-form {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+    .edit-form h3 {
+        margin-top: 0;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .edit-form label {
+        display: block;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .edit-form input[type="text"],
+    .edit-form input[type="number"],
+    .edit-form textarea {
+        width: 100%;
+        padding: 9px 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: inherit;
+        box-sizing: border-box;
+        margin-bottom: 12px;
+    }
+
+    .edit-form small {
+        display: block;
+        color: #6c757d;
+        margin-top: -8px;
+        margin-bottom: 10px;
+    }
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}

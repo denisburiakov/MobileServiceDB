@@ -1,36 +1,35 @@
 ﻿
 @{
-    ViewData["Title"] = "Admin Password";
+    ViewData["Title"] = "Вход администратора";
 }
 <div class="admin-login-container">
     <div class="login-box">
-        <h2>Admin Access Required</h2>
-        <p class="instruction">Please enter the admin password to continue</p>
+        <h2>Требуется вход администратора</h2>
+        <p class="instruction">Введите пароль администратора, чтобы продолжить</p>
         
         <form method="post" action="/AdminPassword/Authenticate" class="password-form">
             <div class="input-group">
-                <label for="password">Admin Password:</label>
+                <label for="password">Пароль администратора:</label>
                 <input type="password" 
                        id="password" 
                        name="password" 
-                       placeholder="Enter admin password" 
+                       placeholder="Введите пароль администратора" 
                        required 
                        autofocus>
             </div>
             
             <div class="form-actions">
-                <button type="submit" class="btn-submit">Login</button>
-                <a href="/" class="btn-cancel">Back to Home</a>
+                <button type="submit" class="btn-submit">Войти</button>
+                <a href="/" class="btn-cancel">На главную</a>
             </div>
             
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="error-message">
-                    Invalid password. Please try again.
+                    Неверный пароль. Попробуйте ещё раз.
                 </div>
             }
 
         </form>
     </div>
 </div>
-

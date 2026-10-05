@@ -1,40 +1,40 @@
 ﻿@model MobileServiceSite.Models.Service
 @{
-    ViewData["Title"] = "Service Registration";
+    ViewData["Title"] = "Регистрация услуги";
 }
 <div class="client-register">
-    <h2>Service Information</h2>
-    <p class="instruction">Please enter service details</p>
+    <h2>Данные услуги</h2>
+    <p class="instruction">Введите данные услуги</p>
 
     <form method="post" action="/Admin/RegisterService" class="client-form">
         <div class="form-group">
-            <label for="DeviceId"><b>Device ID </b></label>
-            <input type="number" placeholder="Please, enter..." name="device_id" />
-            <small>Find device ID in the devices table</small>
+            <label for="DeviceId"><b>ID устройства</b></label>
+            <input type="number" placeholder="Введите..." name="device_id" />
+            <small>Найти ID устройства можно в таблице устройств</small>
         </div>
 
         <div class="form-group">
-            <label for="CategoryId"><b>Category ID (Optional)</b></label>
-            <input type="number" placeholder="Please, enter..." name="category_id" />
-            <small>Find category ID in the categories table</small>
+            <label for="CategoryId"><b>ID категории (необязательно)</b></label>
+            <input type="number" placeholder="Введите..." name="category_id" />
+            <small>Найти ID категории можно в таблице категорий</small>
         </div>
 
         <div class="form-group">
-            <label for="TypeOfService"><b>Service Type </b></label>
-            <input type="text" placeholder="Please, enter..." name="type_of_service"/>
+            <label for="TypeOfService"><b>Название услуги</b></label>
+            <input type="text" placeholder="Введите..." name="type_of_service"/>
         </div>
 
         <div class="form-group">
-            <label for="TimeOfDoing"><b>Estimated Time</b></label>
-            <input type="text" placeholder="Please, enter..." name="time_of_doing" />
+            <label for="TimeOfDoing"><b>Ориентировочное время</b></label>
+            <input type="text" placeholder="Введите..." name="time_of_doing" />
         </div>
 
         <div class="form-group">
-            <label for="CostOfService"><b>Service Cost </b></label>
-            <input type="number" placeholder="Please, enter..." name="cost_of_service" min="0"/>
+            <label for="CostOfService"><b>Стоимость услуги</b></label>
+            <input type="number" placeholder="Введите..." name="cost_of_service" min="0"/>
         </div>
 
-        <button type="submit" class="registerbtn">Register Service</button>
-        <a href="/Admin" class="back-btn">Back to Admin</a>
+        <button type="submit" class="registerbtn">Зарегистрировать услугу</button>
+        <a href="/Admin" class="back-btn">Назад в админ-панель</a>
     </form>
 </div>

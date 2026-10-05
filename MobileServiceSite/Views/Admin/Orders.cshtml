@@ -1,13 +1,13 @@
 ﻿@model List<MobileServiceSite.Models.Order>
 @{
-    ViewData["Title"] = "Заказы";
+    ViewData["Title"] = "Заявки и заказы";
     var newPayments = ViewBag.NewPayments as List<MobileServiceSite.Models.Order>;
 }
 
 <div class="client-info-container">
-    <a href="/Admin" class="back-btn">← Back to Admin</a>
+    <a href="/Admin" class="back-btn">← Назад в админ-панель</a>
 
-    <h1>📋 Заказы</h1>
+    <h1>📋 Заявки и заказы</h1>
 
     @if (TempData["SuccessMessage"] != null)
     {
@@ -28,7 +28,7 @@
             {
                 <div class="payment-item">
                     <span>
-                        Заказ №@o.Id — @o.Client.FirstName @o.Client.LastName
+                        Заявка №@o.Id — @o.Client.FirstName @o.Client.LastName
                         (@o.Client.Phone), @o.Device.Producer @o.Device.Model,
                         <strong>@o.Price BYN</strong>, оплачен @o.PaidAt?.ToString("dd.MM.yyyy HH:mm")
                     </span>
@@ -70,8 +70,11 @@
         {
             <div class="order-card admin-order-card">
                 <div class="order-head">
-                    <h4>Заказ №@order.Id</h4>
-                    <span class="order-status">@MobileServiceSite.Models.OrderStatus.Display(order.Status)</span>
+                    <h4>Заявка №@order.Id</h4>
+                    <span style="display:flex; gap:8px; align-items:center;">
+                        <a href="/Admin/EditOrder/@order.Id" class="mini-btn btn-price">✏️ Редактировать</a>
+                        <span class="order-status">@MobileServiceSite.Models.OrderStatus.Display(order.Status)</span>
+                    </span>
                 </div>
 
                 <p><strong>Клиент:</strong> @order.Client.FirstName @order.Client.LastName (@order.Client.Phone)</p>
@@ -121,6 +124,6 @@
     }
     else
     {
-        <p class="no-data">Заказов пока нет</p>
+        <p class="no-data">Заявок пока нет</p>
     }
 </div>

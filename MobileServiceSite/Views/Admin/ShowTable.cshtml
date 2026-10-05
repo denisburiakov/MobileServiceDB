@@ -1,8 +1,4 @@
-﻿@model dynamic
-@{
-    ViewData["Title"] = ViewBag.TableName;
-}
-<a href="/Admin" class="back-btn">← Back to Admin</a>
+﻿<a href="/Admin" class="back-btn">← Назад в админ-панель</a>
 
 <div class="table-container">
     @if (Model is System.Collections.IEnumerable)
@@ -13,6 +9,37 @@
                     @{
                         var props = Model.GetType().GetGenericArguments()[0].GetProperties();
                         var excludeNames = new string[] { "Client", "Details", "Services", "Device", "Category" };
+
+                        // Русские названия колонок вместо технических имён свойств
+                        var ruHeaders = new Dictionary<string, string>
+                        {
+                            ["Id"] = "ID",
+                            ["FirstName"] = "Имя",
+                            ["LastName"] = "Фамилия",
+                            ["Phone"] = "Телефон",
+                            ["Email"] = "Email",
+                            ["ClientId"] = "ID клиента",
+                            ["DeviceId"] = "ID устройства",
+                            ["CategoryId"] = "ID категории",
+                            ["TypeOfDevice"] = "Тип устройства",
+                            ["Producer"] = "Производитель",
+                            ["Model"] = "Модель",
+                            ["SerialNumber"] = "Серийный номер",
+                            ["DefDescriotion"] = "Описание проблемы",
+                            ["TypeOfDetail"] = "Тип детали",
+                            ["CostOfDetail"] = "Стоимость детали, BYN",
+                            ["ProducerDet"] = "Производитель детали",
+                            ["TypeOfService"] = "Услуга",
+                            ["TimeOfDoing"] = "Время выполнения",
+                            ["CostOfService"] = "Стоимость услуги, BYN",
+                            ["Categories"] = "Категория",
+                            ["Description"] = "Описание заявки",
+                            ["Price"] = "Цена, BYN",
+                            ["Status"] = "Статус",
+                            ["CreatedAt"] = "Создан",
+                            ["PriceSetAt"] = "Цена установлена",
+                            ["PaidAt"] = "Оплачен"
+                        };
 
                         foreach (var prop in props)
                         {
@@ -27,7 +54,7 @@
                             }
                             if (show && !prop.GetGetMethod().IsVirtual)
                             {
-                                <th>@prop.Name</th>
+                                <th>@(ruHeaders.ContainsKey(prop.Name) ? ruHeaders[prop.Name] : prop.Name)</th>
                             }
                         }
                     }
@@ -55,7 +82,24 @@
 
                                 if (show && !prop.GetGetMethod().IsVirtual)
                                 {
-                                    <td>@prop.GetValue(item)</td>
+                                    var value = prop.GetValue(item);
+
+                                    if (prop.PropertyType == typeof(string) && prop.Name == "Status" && value != null)
+                                    {
+                                        <td>@MobileServiceSite.Models.OrderStatus.Display(value.ToString())</td>
+                                    }
+                                    else if (prop.PropertyType == typeof(DateTime) && value != null)
+                                    {
+                                        <td>@(((DateTime)value).ToString("dd.MM.yyyy HH:mm"))</td>
+                                    }
+                                    else if (prop.PropertyType == typeof(DateTime?) && value != null)
+                                    {
+                                        <td>@(((DateTime)value).ToString("dd.MM.yyyy HH:mm"))</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@value</td>
+                                    }
                                 }
                             }
                         }

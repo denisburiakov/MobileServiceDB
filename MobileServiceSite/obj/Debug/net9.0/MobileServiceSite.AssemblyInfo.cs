@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MobileServiceSite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46c7d993cb78d03e51959980353d9cc91f924ef2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+718e2a6ebbb085ccd8d0308667471c2530488cc5")]
 [assembly: System.Reflection.AssemblyProductAttribute("MobileServiceSite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MobileServiceSite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

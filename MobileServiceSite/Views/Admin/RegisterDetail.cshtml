@@ -1,34 +1,34 @@
 ﻿@model MobileServiceSite.Models.Detail
 @{
-    ViewData["Title"] = "Detail Registration";
+    ViewData["Title"] = "Регистрация детали";
 }
 <div class="client-register">
-    <h2>Part/Detail Information</h2>
-    <p class="instruction">Please enter part details</p>
+    <h2>Данные детали</h2>
+    <p class="instruction">Введите данные детали (запчасти)</p>
 
     <form method="post" action="/Admin/RegisterDetail" class="client-form">
         <div class="form-group">
-            <label for="DeviceId"><b>Device ID </b></label>
-            <input type="number" placeholder="Please, enter..." name="device_id" required />
-            <small>Find device ID in the devices table</small>
+            <label for="DeviceId"><b>ID устройства</b></label>
+            <input type="number" placeholder="Введите..." name="device_id" required />
+            <small>Найти ID устройства можно в таблице устройств</small>
         </div>
 
         <div class="form-group">
-            <label for="TypeOfDetail"><b>Part Type</b></label>
-            <input type="text" placeholder="Please, enter..." name="type_of_detail" required />
+            <label for="TypeOfDetail"><b>Тип детали</b></label>
+            <input type="text" placeholder="Введите..." name="type_of_detail" required />
         </div>
 
         <div class="form-group">
-            <label for="ProducerDet"><b>Manufacturer</b></label>
-            <input type="text" placeholder="Please, enter..." name="producer_det" required />
+            <label for="ProducerDet"><b>Производитель</b></label>
+            <input type="text" placeholder="Введите..." name="producer_det" required />
         </div>
 
         <div class="form-group">
-            <label for="CostOfDetail"><b>Cost</b></label>
-            <input type="number" placeholder="Please, enter..." name="cost_of_detail" min="0" required />
+            <label for="CostOfDetail"><b>Стоимость</b></label>
+            <input type="number" placeholder="Введите..." name="cost_of_detail" min="0" required />
         </div>
 
-        <button type="submit" class="registerbtn">Register Part</button>
-        <a href="/Admin" class="back-btn">Back to Admin</a>
+        <button type="submit" class="registerbtn">Зарегистрировать деталь</button>
+        <a href="/Admin" class="back-btn">Назад в админ-панель</a>
     </form>
 </div>

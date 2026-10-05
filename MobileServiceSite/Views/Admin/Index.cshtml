@@ -1,6 +1,15 @@
 ﻿
 @{
-    ViewData["Title"] = "Admin page";
+    ViewData["Title"] = "Панель администратора";
+
+    var tableTitles = new Dictionary<string, string>
+    {
+        ["Clients"] = "Клиенты",
+        ["Devices"] = "Устройства",
+        ["Category"] = "Категории",
+        ["Services"] = "Услуги",
+        ["Details"] = "Детали"
+    };
 }
 
 <div class="register">
@@ -8,34 +17,35 @@
     @if (ViewBag.NewPaymentCount != null && ViewBag.NewPaymentCount > 0)
     {
         <div class="payments-alert">
-            💰 <strong>@ViewBag.NewPaymentCount</strong> заказ(ов) оплачено — клиенты ждут, когда вы приступите к работе.
-            <a href="/Admin/Orders" class="mini-btn btn-work">Перейти к заказам</a>
+            💰 <strong>@ViewBag.NewPaymentCount</strong> заявка(и) оплачено — клиенты ждут, когда вы приступите к работе.
+            <a href="/Admin/Orders" class="mini-btn btn-work">Перейти к заявкам</a>
         </div>
     }
 
     <div class="tables-section">
-        <h2>View Database Tables</h2>
+        <h2>Просмотр таблиц базы данных</h2>
         <div class="table-buttons">
             @foreach (var table in ViewBag.Tables)
             {
+                var title = tableTitles.ContainsKey((string)table) ? tableTitles[(string)table] : (string)table;
                 <a href="/ShowTable?tableName=@table" class="table-btn">
-                    View @table
+                    Таблица: @title
                 </a>
             }
             <a href="/Admin/Orders" class="table-btn">
-                📋 Orders
+                📋 Заявки и заказы
             </a>
         </div>
     </div>
 
     <div class="admin-container">
         <div class="search-section">
-            <h2>🔍 Search Client by Phone</h2>
+            <h2>🔍 Поиск клиента по телефону</h2>
             <form method="get" action="/Admin/SearchClient" class="search-form">
                 <div class="search-group">
-                    <input type="text" name="phone" placeholder="Enter client phone number"
+                    <input type="text" name="phone" placeholder="Введите номер телефона клиента"
                            pattern="\+?[0-9\s\-\(\)]+" required />
-                    <button type="submit" class="search-btn">Search</button>
+                    <button type="submit" class="search-btn">Найти</button>
                 </div>
             </form>
         </div>
@@ -43,32 +53,31 @@
     <div class="admin-container">
 
             <div class="section register-section">
-                <h2>Add New Records</h2>
-                <p class="section-description">Register new entries in the system</p>
+                <h2>Добавление новых записей</h2>
+                <p class="section-description">Регистрация новых записей в системе. Заявки и устройства клиенты добавляют сами в личном кабинете — здесь можно добавить запись вручную.</p>
                 <div class="button-grid">
                     <a href="/Register?registerName=Clients" class="admin-btn add-btn">
                         
-                        <span class="btn-text">Add New Client</span>
+                        <span class="btn-text">Новый клиент</span>
                     </a>
                     <a href="/Register?registerName=Devices" class="admin-btn add-btn">
                         
-                        <span class="btn-text">Add New Device</span>
+                        <span class="btn-text">Новое устройство</span>
                     </a>
                     <a href="/Register?registerName=Details" class="admin-btn add-btn">
                         
-                        <span class="btn-text">Add New Part</span>
+                        <span class="btn-text">Новая деталь</span>
                     </a>
                     <a href="Register?registerName=Services" class="admin-btn add-btn">
                        
-                        <span class="btn-text">Add New Service</span>
+                        <span class="btn-text">Новая услуга</span>
                     </a>
                     <a href="/Register?registerName=Category" class="admin-btn add-btn">
           
-                        <span class="btn-text">Add New Category</span>
+                        <span class="btn-text">Новая категория</span>
                     </a>
                 </div>
             </div>
         </div>
 
     </div>
-

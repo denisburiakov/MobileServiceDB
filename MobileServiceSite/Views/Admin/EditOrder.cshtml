@@ -1,0 +1,60 @@
+@model MobileServiceSite.Models.Order
+@{
+    ViewData["Title"] = $"Заявка №{Model.Id}";
+}
+
+<div class="client-info-container">
+    <a href="/Admin/Orders" class="back-btn">← Назад к заявкам</a>
+
+    <h1>✏️ Редактирование заявки №@Model.Id</h1>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-error">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="order-card admin-order-card">
+        <p><strong>Клиент:</strong> @Model.Client.FirstName @Model.Client.LastName (@Model.Client.Phone)</p>
+        <p><strong>Статус:</strong> @MobileServiceSite.Models.OrderStatus.Display(Model.Status)</p>
+        <p><strong>Создана:</strong> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+        <p>
+            <strong>Цена:</strong>
+            @(Model.Price.HasValue ? Model.Price + " BYN" : "не установлена")
+        </p>
+        <p class="order-hint">Заявку заполнял клиент — здесь можно исправить данные устройства и описание работы.</p>
+    </div>
+
+    <form method="post" action="/Admin/EditOrder/@Model.Id" class="edit-form">
+        <h3>Данные устройства</h3>
+
+        <label for="type_of_device">Тип устройства</label>
+        <input type="text" id="type_of_device" name="type_of_device" maxlength="50" required
+               value="@Model.Device.TypeOfDevice" />
+
+        <label for="producer">Производитель</label>
+        <input type="text" id="producer" name="producer" maxlength="50" required
+               value="@Model.Device.Producer" />
+
+        <label for="model">Модель</label>
+        <input type="text" id="model" name="model" maxlength="50" required
+               value="@Model.Device.Model" />
+
+        <label for="serial_number">Серийный номер</label>
+        <input type="text" id="serial_number" name="serial_number" maxlength="50"
+               value="@Model.Device.SerialNumber" />
+        <small>Если неизвестен — оставьте «не указан»</small>
+
+        <label for="def_descriotion">Описание неисправности</label>
+        <textarea id="def_descriotion" name="def_descriotion" rows="2" maxlength="50">@Model.Device.DefDescriotion</textarea>
+
+        <h3>Заявка</h3>
+
+        <label for="description">Что нужно сделать</label>
+        <textarea id="description" name="description" rows="4" maxlength="500" required>@Model.Description</textarea>
+
+        <div class="edit-actions">
+            <button type="submit" class="order-btn">💾 Сохранить</button>
+            <a href="/Admin/Orders" class="back-btn">Отмена</a>
+        </div>
+    </form>
+</div>
